@@ -10,11 +10,12 @@
   </parent>
 
   <groupId>io.jenkins.plugins</groupId>
-  <artifactId>conditional-parameter</artifactId>
+  <artifactId>smart-parameter</artifactId>
   <version>${revision}${changelist}</version>
   <packaging>hpi</packaging>
 
-  <name>TODO Plugin</name>
+  <name>smart-parameter</name>
+  <description>A Jenkins plugin that enables smart, conditional parameters in your build forms</description>
   <url>https://github.com/jenkinsci/${project.artifactId}-plugin</url>
   <licenses>
     <license>
