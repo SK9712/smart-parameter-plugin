@@ -1,13 +1,16 @@
-# conditional-parameter
+# Smart Parameter Plugin
 
 ## Introduction
 
-TODO Describe what your plugin does here
+Smart Parameter is a Jenkins plugin that enables smart, conditional parameters in your build forms. 
+Smart-Parameter dynamically shows or hides input fields based on values of other parameters, creating cleaner, 
+more intuitive build forms that adapt to user selections.
 
 ## Getting started
 
-TODO Tell users how to configure your plugin here, include screenshots, pipeline examples and 
-configuration-as-code examples.
+mvn hpi:run -Dport=5000
+<br />
+mvn clean package
 
 ## Issues
 

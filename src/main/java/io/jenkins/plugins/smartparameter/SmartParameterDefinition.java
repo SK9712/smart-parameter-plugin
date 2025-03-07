@@ -1,4 +1,4 @@
-package io.jenkins.plugins.conditionalparameter;
+package io.jenkins.plugins.smartparameter;
 
 import hudson.Extension;
 import hudson.model.ParameterDefinition;
@@ -18,7 +18,7 @@ import javax.annotation.Nonnull;
 /**
  * A parameter that is shown or hidden based on a condition.
  */
-public class ConditionalParameterDefinition extends SimpleParameterDefinition {
+public class SmartParameterDefinition extends SimpleParameterDefinition {
 
     private final String defaultValue;
     private String condition;
@@ -27,7 +27,7 @@ public class ConditionalParameterDefinition extends SimpleParameterDefinition {
     private ParameterDefinition parameterDefinition;
 
     @DataBoundConstructor
-    public ConditionalParameterDefinition(String name, String description, String defaultValue) {
+    public SmartParameterDefinition(String name, String description, String defaultValue) {
         super(name, description);
         this.defaultValue = defaultValue;
     }
@@ -122,12 +122,12 @@ public class ConditionalParameterDefinition extends SimpleParameterDefinition {
     }
 
     @Extension
-    @Symbol("conditionalParameter")
+    @Symbol("smartParameter")
     public static class DescriptorImpl extends ParameterDescriptor {
         @Nonnull
         @Override
         public String getDisplayName() {
-            return "Conditional Parameter";
+            return "Smart Parameter";
         }
 
         /**

@@ -2,7 +2,7 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:i="jelly:fmt" xmlns:p="/lib/hudson/project">
   <st:include page="header.jelly" />
   <f:entry title="${it.name}" description="${it.description}">
-    <div class="conditional-parameter"
+    <div class="smart-parameter"
          data-control-param="${it.controlParameter}"
          data-condition="${it.condition}"
          data-control-value="${it.controlValue}">

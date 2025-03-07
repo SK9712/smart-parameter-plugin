@@ -1,40 +1,40 @@
 /**
- * JavaScript to handle conditional parameter visibility
+ * JavaScript to handle smart parameter visibility
  */
 (function() {
-    console.log("Conditional Parameter JS loaded");
+    console.log("Smart Parameter JS loaded");
 
     // Execute when the DOM is fully loaded
     function initialize() {
-        console.log("Initializing conditional parameters");
-        initConditionalParameters();
+        console.log("Initializing smart parameters");
+        initSmartParameters();
 
         // Add event listeners to all potential control parameters
         document.querySelectorAll('input, select, textarea').forEach(function(element) {
             element.addEventListener('change', function() {
                 console.log("Parameter changed: " + element.name);
-                updateConditionalParameters();
+                updateSmartParameters();
             });
         });
     }
 
     /**
-     * Initialize all conditional parameters based on current values
+     * Initialize all smart parameters based on current values
      */
-    function initConditionalParameters() {
-        var conditionalParams = document.querySelectorAll('.conditional-parameter');
-        console.log("Found " + conditionalParams.length + " conditional parameters");
+    function initSmartParameters() {
+        var smartParams = document.querySelectorAll('.smart-parameter');
+        console.log("Found " + smartParams.length + " smart parameters");
 
-        conditionalParams.forEach(function(param) {
+        smartParams.forEach(function(param) {
             updateParameterVisibility(param);
         });
     }
 
     /**
-     * Update all conditional parameters when any input changes
+     * Update all smart parameters when any input changes
      */
-    function updateConditionalParameters() {
-        document.querySelectorAll('.conditional-parameter').forEach(function(param) {
+    function updateSmartParameters() {
+        document.querySelectorAll('.smart-parameter').forEach(function(param) {
             updateParameterVisibility(param);
         });
     }
