@@ -1,0 +1,28 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:i="jelly:fmt" xmlns:p="/lib/hudson/project">
+  <!-- Include the smart parameter script -->
+  <st:include page="header.jelly" />
+
+  <!-- Wrapper div with smart parameter attributes -->
+  <div class="smart-parameter smart-wrapper-parameter"
+       data-control-ref-parameter="${it.name}"
+       data-control-type="${%wrapper}"
+       data-control-param="${it.controlParameter}"
+       data-condition="${it.condition}"
+       data-control-value="${it.controlValue}">
+
+    <!-- Render the wrapped parameter -->
+    <j:set var="wrappedParameter" value="${it.wrappedParameter}" />
+    <j:if test="${wrappedParameter != null}">
+      <st:include it="${wrappedParameter}" page="index.jelly" />
+    </j:if>
+
+  </div>
+
+  <script>
+    // Register this wrapper parameter
+    document.addEventListener("DOMContentLoaded", function() {
+      console.log("Smart Wrapper Parameter registered: ${it.name}");
+    });
+  </script>
+</j:jelly>

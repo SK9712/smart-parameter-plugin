@@ -3,6 +3,7 @@
   <st:include page="header.jelly" />
   <f:entry title="${it.name}" description="${it.description}">
     <div class="smart-parameter"
+         data-control-type="${%field}"
          data-control-param="${it.controlParameter}"
          data-condition="${it.condition}"
          data-control-value="${it.controlValue}">

@@ -44,15 +44,22 @@
      * @param {Element} param - The parameter element to update
      */
     function updateParameterVisibility(param) {
-        const controlParam = param.getAttribute('data-control-param');
-        const condition = param.getAttribute('data-condition');
-        const controlValue = param.getAttribute('data-control-value');
+        var controlType = param.getAttribute('data-control-type');
+        var controlParam = param.getAttribute('data-control-param');
+        var condition = param.getAttribute('data-condition');
+        var controlValue = param.getAttribute('data-control-value');
 
         console.log("Updating visibility for param: control=" + controlParam + ", condition=" + condition + ", value=" + controlValue);
 
         if (!controlParam || !condition || !controlValue) {
             console.log("Missing condition data, always showing");
             return; // No condition set, always show
+        }
+
+        if(controlType === "wrapper") {
+            toggleReferenceElement(param.getAttribute('data-control-ref-parameter'),
+                                   controlParam, condition, controlValue);
+            return;
         }
 
         // Find the control parameter element
@@ -125,6 +132,49 @@
         }
 
         return element;
+    }
+
+    function toggleReferenceElement(paramName, controlParam, condition, controlValue) {
+        element = document.querySelector(`div[name="parameter"] > input[name="name"][value="${paramName}"]`);
+        if (element) {
+            // Find the control parameter element
+            const controlElement = findControlElement(controlParam);
+            if (!controlElement) {
+                console.log("Control element not found: " + controlParam);
+                return; // Control not found, show by default
+            }
+
+            const currentValue = controlElement.value;
+            console.log("Control element value: " + currentValue);
+
+            let isVisible = false;
+
+            // Check the condition
+            switch (condition) {
+                case 'equals':
+                    isVisible = (currentValue === controlValue);
+                    break;
+                case 'notEquals':
+                    isVisible = (currentValue !== controlValue);
+                    break;
+                case 'contains':
+                    isVisible = currentValue.includes(controlValue);
+                    break;
+                case 'startsWith':
+                    isVisible = currentValue.startsWith(controlValue);
+                    break;
+                case 'endsWith':
+                    isVisible = currentValue.endsWith(controlValue);
+                    break;
+                default:
+                    isVisible = true;
+            }
+
+            // Update visibility - find the closest parent TR if parameter is inside a table
+            const paramRow = element.closest('.jenkins-form-item') || element;
+            paramRow.style.display = isVisible ? '' : 'none';
+            console.log("Set visibility: " + isVisible + " for element");
+        }
     }
 
     // Add to window onload to ensure all elements are loaded first

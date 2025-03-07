@@ -1,4 +1,4 @@
 <?jelly escape-by-default='true'?>
 <div>
-    TODO
+    A Jenkins plugin that enables smart, conditional parameters in your build forms. Smart-Parameter dynamically shows or hides input fields based on values of other parameters, creating cleaner, more intuitive build forms that adapt to user selections.
 </div>
