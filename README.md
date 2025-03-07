@@ -8,11 +8,11 @@ more intuitive build forms that adapt to user selections.
 
 ## Getting started
 
+```
 mvn hpi:run -Dport=5000
 
-<br />
-
 mvn clean package
+```
 
 ## Issues
 
