@@ -1,0 +1,34 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+  <f:entry title="${%Name}" field="name">
+    <f:textbox />
+  </f:entry>
+
+  <f:entry title="${%Default Value}" field="defaultValue">
+    <f:textbox />
+  </f:entry>
+
+  <f:entry title="${%Description}" field="description">
+    <f:textarea />
+  </f:entry>
+
+  <f:section title="${%Conditional Visibility}">
+    <f:entry title="${%Control Parameter}" field="controlParameter">
+      <f:textbox />
+    </f:entry>
+
+    <f:entry title="${%Condition}" field="condition">
+      <f:select default="equals">
+        <f:option value="equals">equals</f:option>
+        <f:option value="notEquals">not equals</f:option>
+        <f:option value="contains">contains</f:option>
+        <f:option value="startsWith">starts with</f:option>
+        <f:option value="endsWith">ends with</f:option>
+      </f:select>
+    </f:entry>
+
+    <f:entry title="${%Control Value}" field="controlValue">
+      <f:textbox />
+    </f:entry>
+  </f:section>
+</j:jelly>

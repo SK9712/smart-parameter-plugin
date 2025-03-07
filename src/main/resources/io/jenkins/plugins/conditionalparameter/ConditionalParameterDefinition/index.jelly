@@ -1,0 +1,19 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:i="jelly:fmt" xmlns:p="/lib/hudson/project">
+  <st:include page="header.jelly" />
+  <f:entry title="${it.name}" description="${it.description}">
+    <div class="conditional-parameter"
+         data-control-param="${it.controlParameter}"
+         data-condition="${it.condition}"
+         data-control-value="${it.controlValue}">
+      <input type="hidden" name="parameter" value="${it.name}" />
+      <f:textbox name="value" value="${it.defaultValue}" data-parameter-name="${it.name}" />
+    </div>
+    <script>
+      // Register this parameter
+      document.addEventListener("DOMContentLoaded", function() {
+        console.log("Parameter registered: ${it.name}");
+      });
+    </script>
+  </f:entry>
+</j:jelly>
