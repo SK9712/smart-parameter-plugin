@@ -134,46 +134,49 @@
         return element;
     }
 
-    function toggleReferenceElement(paramName, controlParam, condition, controlValue) {
-        element = document.querySelector(`div[name="parameter"] > input[name="name"][value="${paramName}"]`);
-        if (element) {
-            // Find the control parameter element
-            const controlElement = findControlElement(controlParam);
-            if (!controlElement) {
-                console.log("Control element not found: " + controlParam);
-                return; // Control not found, show by default
+    function toggleReferenceElement(params, controlParam, condition, controlValue) {
+        const paramList = params.split(',');
+        for (let i = 0; i < paramList.length; i++) {
+            element = document.querySelector(`div[name="parameter"] > input[name="name"][value="${paramList[i]}"]`);
+            if (element) {
+                // Find the control parameter element
+                const controlElement = findControlElement(controlParam);
+                if (!controlElement) {
+                    console.log("Control element not found: " + controlParam);
+                    return; // Control not found, show by default
+                }
+
+                const currentValue = controlElement.value;
+                console.log("Control element value: " + currentValue);
+
+                let isVisible = false;
+
+                // Check the condition
+                switch (condition) {
+                    case 'equals':
+                        isVisible = (currentValue === controlValue);
+                        break;
+                    case 'notEquals':
+                        isVisible = (currentValue !== controlValue);
+                        break;
+                    case 'contains':
+                        isVisible = currentValue.includes(controlValue);
+                        break;
+                    case 'startsWith':
+                        isVisible = currentValue.startsWith(controlValue);
+                        break;
+                    case 'endsWith':
+                        isVisible = currentValue.endsWith(controlValue);
+                        break;
+                    default:
+                        isVisible = true;
+                }
+
+                // Update visibility - find the closest parent TR if parameter is inside a table
+                const paramRow = element.closest('.jenkins-form-item') || element;
+                paramRow.style.display = isVisible ? '' : 'none';
+                console.log("Set visibility: " + isVisible + " for element");
             }
-
-            const currentValue = controlElement.value;
-            console.log("Control element value: " + currentValue);
-
-            let isVisible = false;
-
-            // Check the condition
-            switch (condition) {
-                case 'equals':
-                    isVisible = (currentValue === controlValue);
-                    break;
-                case 'notEquals':
-                    isVisible = (currentValue !== controlValue);
-                    break;
-                case 'contains':
-                    isVisible = currentValue.includes(controlValue);
-                    break;
-                case 'startsWith':
-                    isVisible = currentValue.startsWith(controlValue);
-                    break;
-                case 'endsWith':
-                    isVisible = currentValue.endsWith(controlValue);
-                    break;
-                default:
-                    isVisible = true;
-            }
-
-            // Update visibility - find the closest parent TR if parameter is inside a table
-            const paramRow = element.closest('.jenkins-form-item') || element;
-            paramRow.style.display = isVisible ? '' : 'none';
-            console.log("Set visibility: " + isVisible + " for element");
         }
     }
 

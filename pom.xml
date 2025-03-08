@@ -14,7 +14,7 @@
   <version>${revision}${changelist}</version>
   <packaging>hpi</packaging>
 
-  <name>smart-parameter</name>
+  <name>Smart Parameter</name>
   <description>A Jenkins plugin that enables smart, conditional parameters in your build forms</description>
   <url>https://github.com/jenkinsci/${project.artifactId}-plugin</url>
   <licenses>

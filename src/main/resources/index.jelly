@@ -1,4 +1,4 @@
 <?jelly escape-by-default='true'?>
 <div>
-    A Jenkins plugin that enables smart, conditional parameters in your build forms. Smart-Parameter dynamically shows or hides input fields based on values of other parameters, creating cleaner, more intuitive build forms that adapt to user selections.
+    This plugin enables smart, conditional parameters in your build forms. SmartParams dynamically shows or hides input fields based on values of other parameters, creating cleaner, more intuitive build forms that adapt to user selections. Perfect for complex build pipelines where parameter choices determine which additional options are relevant.
 </div>
