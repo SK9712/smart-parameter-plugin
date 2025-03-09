@@ -1,0 +1,164 @@
+package io.jenkins.plugins.smartparameter;
+
+import hudson.Extension;
+import hudson.model.ParameterDefinition;
+import hudson.model.ParameterValue;
+import hudson.model.SimpleParameterDefinition;
+import hudson.model.StringParameterValue;
+import org.jenkinsci.Symbol;
+import org.kohsuke.stapler.DataBoundConstructor;
+import org.kohsuke.stapler.DataBoundSetter;
+import org.kohsuke.stapler.StaplerRequest;
+import net.sf.json.JSONObject;
+
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Advanced smart parameter with support for multiple conditions.
+ */
+public class MultiConditionParameterDefinition extends SimpleParameterDefinition {
+
+    private final String defaultValue;
+    private List<ParameterCondition> conditions = new ArrayList<>();
+    private String logicalOperator = "AND"; // Default is AND
+    private ParameterDefinition parameterDefinition;
+
+    @DataBoundConstructor
+    public MultiConditionParameterDefinition(String name, String description, String defaultValue) {
+        super(name, description);
+        this.defaultValue = defaultValue;
+    }
+
+    public String getDefaultValue() {
+        return defaultValue;
+    }
+
+    public List<ParameterCondition> getConditions() {
+        return conditions;
+    }
+
+    @DataBoundSetter
+    public void setConditions(List<ParameterCondition> conditions) {
+        this.conditions = conditions;
+    }
+
+    public String getLogicalOperator() {
+        return logicalOperator;
+    }
+
+    @DataBoundSetter
+    public void setLogicalOperator(String logicalOperator) {
+        this.logicalOperator = logicalOperator;
+    }
+
+    public ParameterDefinition getParameterDefinition() {
+        return parameterDefinition;
+    }
+
+    @DataBoundSetter
+    public void setParameterDefinition(ParameterDefinition parameterDefinition) {
+        this.parameterDefinition = parameterDefinition;
+    }
+
+    /**
+     * Evaluate if this parameter should be visible based on all conditions.
+     * @param request The request containing other parameter values
+     * @return true if the parameter should be visible
+     */
+    public boolean isVisible(StaplerRequest request) {
+        if (conditions.isEmpty()) {
+            return true; // If no conditions are set, always show
+        }
+
+        boolean result = "AND".equals(logicalOperator); // Start with true for AND, false for OR
+
+        for (ParameterCondition condition : conditions) {
+            boolean conditionResult = evaluateCondition(condition, request);
+
+            if ("AND".equals(logicalOperator)) {
+                result = result && conditionResult;
+                // Short-circuit for AND - if any condition is false, result is false
+                if (!result) {
+                    return false;
+                }
+            } else {
+                result = result || conditionResult;
+                // Short-circuit for OR - if any condition is true, result is true
+                if (result) {
+                    return true;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    private boolean evaluateCondition(ParameterCondition condition, StaplerRequest request) {
+        String controlParameter = condition.getControlParameter();
+        String conditionType = condition.getCondition();
+        String controlValue = condition.getControlValue();
+
+        if (controlParameter == null || conditionType == null || controlValue == null) {
+            return true; // If condition is not fully defined, do not restrict visibility
+        }
+
+        String[] values = request.getParameterValues(controlParameter);
+        if (values == null || values.length == 0) {
+            return false; // No value found for control parameter
+        }
+
+        String value = values[0];
+
+        switch (conditionType) {
+            case "equals":
+                return controlValue.equals(value);
+            case "notEquals":
+                return !controlValue.equals(value);
+            case "contains":
+                return value.contains(controlValue);
+            case "startsWith":
+                return value.startsWith(controlValue);
+            case "endsWith":
+                return value.endsWith(controlValue);
+            case "regex":
+                return value.matches(controlValue);
+            default:
+                return true;
+        }
+    }
+
+    @Override
+    public ParameterValue createValue(StaplerRequest req, JSONObject jo) {
+        if (parameterDefinition != null) {
+            return parameterDefinition.createValue(req, jo);
+        }
+        return new StringParameterValue(getName(), defaultValue, getDescription());
+    }
+
+    @Override
+    public ParameterValue createValue(String value) {
+        if (parameterDefinition != null && parameterDefinition instanceof SimpleParameterDefinition) {
+            return ((SimpleParameterDefinition) parameterDefinition).createValue(value);
+        }
+        return new StringParameterValue(getName(), value, getDescription());
+    }
+
+    @Extension
+    @Symbol("multiConditionParameter")
+    public static class DescriptorImpl extends ParameterDescriptor {
+        @Nonnull
+        @Override
+        public String getDisplayName() {
+            return "Smart Parameter (Multiple Conditions)";
+        }
+
+        public hudson.util.ListBoxModel doFillLogicalOperatorItems() {
+            hudson.util.ListBoxModel items = new hudson.util.ListBoxModel();
+            items.add("AND", "AND");
+            items.add("OR", "OR");
+            return items;
+        }
+    }
+}

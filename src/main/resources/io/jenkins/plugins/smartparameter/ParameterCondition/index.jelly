@@ -1,0 +1,23 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+  <!-- Note: This file is typically not used directly, as ParameterCondition objects are
+       embedded within other parameter definitions. See config.jelly for the configuration view. -->
+  <!-- Display condition details if viewed directly -->
+  <div class="parameter-condition-display">
+    <div class="condition-summary">
+      <strong>${it.controlParameter}</strong>
+      <span class="condition-operator">
+        <j:choose>
+          <j:when test="${it.condition == 'equals'}">equals</j:when>
+          <j:when test="${it.condition == 'notEquals'}">does not equal</j:when>
+          <j:when test="${it.condition == 'contains'}">contains</j:when>
+          <j:when test="${it.condition == 'startsWith'}">starts with</j:when>
+          <j:when test="${it.condition == 'endsWith'}">ends with</j:when>
+          <j:when test="${it.condition == 'regex'}">matches regex</j:when>
+          <j:otherwise>${it.condition}</j:otherwise>
+        </j:choose>
+      </span>
+      <span class="condition-value">"${it.controlValue}"</span>
+    </div>
+  </div>
+</j:jelly>

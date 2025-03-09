@@ -1,0 +1,16 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+  <table width="100%">
+    <f:entry title="${%Control Parameter}" field="controlParameter">
+      <f:textbox />
+    </f:entry>
+
+    <f:entry title="${%Condition}" field="condition">
+      <f:select />
+    </f:entry>
+
+    <f:entry title="${%Control Value}" field="controlValue">
+      <f:textbox />
+    </f:entry>
+  </table>
+</j:jelly>

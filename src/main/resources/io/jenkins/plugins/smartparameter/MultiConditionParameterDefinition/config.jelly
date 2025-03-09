@@ -1,0 +1,30 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form">
+  <f:entry title="${%Name}" field="name">
+    <f:textbox />
+  </f:entry>
+
+  <f:entry title="${%Default Value}" field="defaultValue">
+    <f:textbox />
+  </f:entry>
+
+  <f:entry title="${%Description}" field="description">
+    <f:textarea />
+  </f:entry>
+
+  <f:section title="${%Conditional Visibility}">
+    <f:entry title="${%Logical Operator}" field="logicalOperator">
+      <f:select />
+    </f:entry>
+
+    <f:entry title="${%Conditions}" description="${%Add conditions to control parameter visibility}">
+      <f:repeatableProperty field="conditions" minimum="1" header="${%Condition}" add="${%Add Condition}">
+        <f:entry>
+          <div align="right">
+            <f:repeatableDeleteButton />
+          </div>
+        </f:entry>
+      </f:repeatableProperty>
+    </f:entry>
+  </f:section>
+</j:jelly>

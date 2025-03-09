@@ -1,0 +1,55 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:i="jelly:fmt" xmlns:p="/lib/hudson/project">
+  <st:include page="header.jelly" />
+    <div class="smart-parameter smart-wrapper-parameter multi-condition-parameter"
+         data-control-ref-parameter="${it.name}"
+         data-control-type="${%wrapper}"
+         data-logical-operator="${it.logicalOperator}">
+
+      <!-- Render the wrapped parameter -->
+      <j:set var="wrappedParameter" value="${it.wrappedParameter}" />
+      <j:if test="${wrappedParameter != null}">
+        <st:include it="${wrappedParameter}" page="index.jelly" />
+      </j:if>
+
+      <input type="hidden" name="parameter" value="${it.name}" />
+
+      <!-- Add conditions as data attributes in JSON format -->
+      <j:forEach items="${it.conditions}" var="condition" indexVar="i">
+        <input type="hidden"
+               class="condition-data"
+               data-control-param="${condition.controlParameter}"
+               data-condition="${condition.condition}"
+               data-control-value="${condition.controlValue}"
+               data-index="${i}" />
+      </j:forEach>
+
+    </div>
+
+    <script>
+      // Register this parameter for visibility updates
+      document.addEventListener("DOMContentLoaded", function() {
+        console.log("Multi-condition parameter registered: ${it.name}");
+
+        // Add this parameter to the registry with all its conditions
+        if (window.smartParams === undefined) {
+          window.smartParams = {};
+        }
+
+        const conditions = [];
+        document.querySelectorAll('.smart-parameter[data-parameter-name="${it.name}"] .condition-data').forEach(function(elem) {
+          conditions.push({
+            controlParam: elem.getAttribute('data-control-param'),
+            condition: elem.getAttribute('data-condition'),
+            controlValue: elem.getAttribute('data-control-value')
+          });
+        });
+
+        window.smartParams["${it.name}"] = {
+          type: "multiCondition",
+          logicalOperator: "${it.logicalOperator}",
+          conditions: conditions
+        };
+      });
+    </script>
+</j:jelly>
