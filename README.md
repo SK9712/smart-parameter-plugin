@@ -13,7 +13,10 @@ This plugin is perfect for complex build pipelines where parameter choices deter
 ## Features
 
 - **Conditional Visibility**: Show or hide parameters based on the values of other parameters
-- **Multiple Condition Types**: Support for equals, not equals, contains, starts with, and ends with conditions
+- **Multiple Condition Types**: Support for equals, not equals, contains, starts with, ends with, and regex pattern matching
+- **Multiple Condition Logic**: Combine conditions with AND/OR operators for complex logic
+- **Parameter Wrappers**: Control the visibility of existing parameter types
+- **Multiple Reference Parameters**: Control multiple parameters with a single wrapper
 - **Simple Configuration**: Easy to set up in your job's parameter definitions
 - **Real-time Updates**: Parameters update immediately when controlling values change
 
@@ -25,7 +28,18 @@ This plugin is perfect for complex build pipelines where parameter choices deter
 
 ## Usage
 
-### Adding a Smart Parameter to a Job
+### Parameter Types
+
+The plugin provides four parameter types:
+
+1. **Smart Parameter**: Basic parameter with conditional visibility based on a single condition
+2. **Smart Parameter (Multiple Conditions)**: Enhanced parameter with multiple conditions combined by AND/OR logic
+3. **Smart Wrapper Parameter**: Wraps existing parameters and controls their visibility based on a single condition
+4. **Smart Wrapper Parameter (Multiple Conditions)**: Controls visibility of referenced parameters based on multiple conditions
+
+### 1. Smart Parameter
+
+This is the basic parameter type with a single visibility condition.
 
 1. In your Jenkins job configuration, go to the "This project is parameterized" section
 2. Click "Add Parameter" and select "Smart Parameter"
@@ -35,10 +49,51 @@ This plugin is perfect for complex build pipelines where parameter choices deter
    - **Description**: A helpful description of the parameter
 4. Configure the conditional visibility section:
    - **Control Parameter**: The name of another parameter that controls visibility
-   - **Condition**: Select one of: equals, not equals, contains, starts with, ends with
+   - **Condition**: Select one of: equals, not equals, contains, starts with, ends with, matches regex
    - **Control Value**: The value to compare against
 
-### Example Configuration
+### 2. Smart Parameter (Multiple Conditions)
+
+This parameter type allows for more complex logic with multiple conditions combined by AND/OR operators.
+
+1. Click "Add Parameter" and select "Smart Parameter (Multiple Conditions)"
+2. Fill in the basic parameter information (Name, Default Value, Description)
+3. Configure the conditional visibility section:
+   - **Logical Operator**: Choose between AND (all conditions must be true) or OR (any condition can be true)
+   - **Conditions**: Click "Add Condition" to add multiple conditions
+   - For each condition, specify:
+      - **Control Parameter**: The name of the parameter that controls visibility
+      - **Condition**: Type of condition (equals, not equals, contains, etc.)
+      - **Control Value**: The value to compare against
+
+### 3. Smart Wrapper Parameter
+
+This parameter type doesn't add a new input field but instead controls the visibility of other parameters.
+
+1. Click "Add Parameter" and select "Parameter Wrapper"
+2. Fill in:
+   - **Name**: A unique identifier (not shown to users)
+   - **Description**: Optional description (not shown to users)
+3. Configure:
+   - **Control Parameter**: The parameter that controls visibility
+   - **Condition**: Type of condition (equals, not equals, contains, etc.)
+   - **Control Value**: The value to compare against
+   - **Referenced Parameters**: Comma-separated list of parameter names to control
+
+### 4. Smart Wrapper Parameter (Multiple Conditions)
+
+This is the most powerful parameter type, allowing you to control visibility of other parameters using multiple conditions.
+
+1. Click "Add Parameter" and select "Smart Wrapper Parameter (Multiple Conditions)"
+2. Fill in the basic information (Name, Description)
+3. Configure:
+   - **Logical Operator**: Choose between AND or OR logic
+   - **Conditions**: Add multiple conditions as needed
+   - **Referenced Parameters**: Comma-separated list of parameter names to control
+
+### Example Configurations
+
+#### Basic Example
 
 Let's say you have a job with a "DEPLOYMENT_ENV" choice parameter with values "dev", "staging", and "prod". You might want to add additional parameters that are only relevant for specific environments:
 
@@ -52,14 +107,56 @@ Let's say you have a job with a "DEPLOYMENT_ENV" choice parameter with values "d
    - Condition: equals
    - Control Value: prod
 
-With this configuration, the "STAGING_CONFIG" parameter will only be visible when "DEPLOYMENT_ENV" is set to "staging", and "PRODUCTION_APPROVER" will only be visible when "DEPLOYMENT_ENV" is set to "prod".
+#### Advanced Example
+
+For a more complex scenario, let's say you want to show a database configuration parameter only when:
+- The deployment environment is "prod" AND the region is "us-east"
+- OR when the deployment type is "database-migration"
+
+1. Add a "Smart Parameter (Multiple Conditions)" named "DB_CONFIG" with:
+   - Logical Operator: OR
+   - First condition:
+      - Logical Operator: AND
+      - Sub-condition 1:
+         - Control Parameter: DEPLOYMENT_ENV
+         - Condition: equals
+         - Control Value: prod
+      - Sub-condition 2:
+         - Control Parameter: REGION
+         - Condition: equals
+         - Control Value: us-east
+   - Second condition:
+      - Control Parameter: DEPLOYMENT_TYPE
+      - Condition: equals
+      - Control Value: database-migration
+
+#### Wrapper Example
+
+To control multiple existing parameters with a single condition:
+
+1. Add a "Smart Wrapper Parameter" with:
+   - Control Parameter: ADVANCED_MODE
+   - Condition: equals
+   - Control Value: true
+   - Referenced Parameters: CACHE_TTL,RETRY_COUNT,TIMEOUT_SECONDS
+
+This will show or hide the CACHE_TTL, RETRY_COUNT, and TIMEOUT_SECONDS parameters when ADVANCED_MODE is set to "true".
 
 ## How It Works
 
 The plugin adds JavaScript to your Jenkins build forms that:
 1. Monitors changes to parameter values
-2. Evaluates conditions for each smart parameter
+2. Evaluates conditions for each smart parameter and wrapper
 3. Updates the visibility of parameters in real-time
+
+## Condition Types
+
+- **equals**: The control parameter value must exactly match the control value
+- **notEquals**: The control parameter value must not match the control value
+- **contains**: The control parameter value must contain the control value as a substring
+- **startsWith**: The control parameter value must start with the control value
+- **endsWith**: The control parameter value must end with the control value
+- **regex**: The control parameter value must match the regular expression pattern in the control value
 
 ## Building and Testing
 
