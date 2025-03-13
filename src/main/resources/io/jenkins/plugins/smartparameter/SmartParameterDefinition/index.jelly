@@ -7,7 +7,7 @@
          data-control-param="${it.controlParameter}"
          data-condition="${it.condition}"
          data-control-value="${it.controlValue}">
-      <input type="hidden" name="parameter" value="${it.name}" />
+      <input type="hidden" name="name" value="${it.name}" />
       <f:textbox name="value" value="${it.defaultValue}" data-parameter-name="${it.name}" />
     </div>
     <script>

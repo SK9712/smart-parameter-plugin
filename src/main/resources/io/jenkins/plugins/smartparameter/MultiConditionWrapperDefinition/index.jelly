@@ -12,7 +12,7 @@
         <st:include it="${wrappedParameter}" page="index.jelly" />
       </j:if>
 
-      <input type="hidden" name="parameter" value="${it.name}" />
+      <input type="hidden" name="name" value="${it.name}" />
 
       <!-- Add conditions as data attributes in JSON format -->
       <j:forEach items="${it.conditions}" var="condition" indexVar="i">

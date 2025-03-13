@@ -1,10 +1,7 @@
 package io.jenkins.plugins.smartparameter;
 
 import hudson.Extension;
-import hudson.model.ParameterDefinition;
-import hudson.model.ParameterValue;
-import hudson.model.SimpleParameterDefinition;
-import hudson.model.StringParameterValue;
+import hudson.model.*;
 import hudson.util.FormValidation;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -107,18 +104,21 @@ public class SmartParameterDefinition extends SimpleParameterDefinition {
 
     @Override
     public ParameterValue createValue(StaplerRequest req, JSONObject jo) {
-        if (parameterDefinition != null) {
-            return parameterDefinition.createValue(req, jo);
+        if(jo.isNullObject()) {
+            return new TextParameterValue(getName(), defaultValue, getDescription());
         }
-        return new StringParameterValue(getName(), defaultValue, getDescription());
+
+        String value = jo.getString("value");
+        if(value == null || value.isEmpty()){
+            value = defaultValue;
+        }
+
+        return new StringParameterValue(getName(), value, getDescription());
     }
 
     @Override
     public ParameterValue createValue(String value) {
-        if (parameterDefinition != null && parameterDefinition instanceof SimpleParameterDefinition) {
-            return ((SimpleParameterDefinition) parameterDefinition).createValue(value);
-        }
-        return new StringParameterValue(getName(), value, getDescription());
+        return new TextParameterValue(this.getName(), value, this.getDescription());
     }
 
     @Extension
