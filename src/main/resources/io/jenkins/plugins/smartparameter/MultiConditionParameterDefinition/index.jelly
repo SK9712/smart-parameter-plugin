@@ -1,13 +1,15 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define" xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form" xmlns:i="jelly:fmt" xmlns:p="/lib/hudson/project">
   <st:include page="header.jelly" />
+  <f:entry title="${it.name}" description="${it.description}">
   <div class="smart-parameter smart-wrapper-parameter multi-condition-parameter"
        data-parameter-name="${it.name}"
        data-control-ref-parameter="${it.refParameter}"
        data-control-type="wrapper"
        data-logical-operator="${it.logicalOperator}">
 
-    <input type="hidden" name="name" value="${it.name}" />
+       <input type="hidden" name="name" value="${it.name}" />
+       <f:textbox name="value" value="${it.defaultValue}" data-parameter-name="${it.name}" />
 
     <!-- Render the wrapped parameter -->
     <j:set var="wrappedParameter" value="${it.wrappedParameter}" />
@@ -53,4 +55,5 @@
       };
     });
   </script>
+</f:entry>
 </j:jelly>
