@@ -11,7 +11,8 @@
 
   <groupId>io.jenkins.plugins</groupId>
   <artifactId>smart-parameter</artifactId>
-  <version>${revision}${changelist}</version>
+<!--  <version>${revision}${changelist}</version>-->
+  <version>${revision}</version>
   <packaging>hpi</packaging>
 
   <name>Smart Parameter</name>
@@ -31,7 +32,7 @@
   </scm>
 
   <properties>
-    <revision>1.0</revision>
+    <revision>1.2</revision>
     <changelist>-SNAPSHOT</changelist>
     <!-- https://www.jenkins.io/doc/developer/plugin-development/choosing-jenkins-baseline/ -->
     <jenkins.version>2.414.3</jenkins.version>
